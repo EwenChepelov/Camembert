@@ -1,4 +1,4 @@
-name: Build and Release APK
+name: Build and Upload APK
 
 on:
   workflow_dispatch:
@@ -6,9 +6,10 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-release:
-    name: Build and Release APK
+  build:
+    name: Build APK
     runs-on: ubuntu-latest
+    
     permissions:
       contents: write
       packages: write
@@ -31,23 +32,36 @@ jobs:
           packages: 'platforms;android-36 build-tools;36.0.0 platforms;android-30 extras;android;m2repository'
           accept-android-sdk-licenses: true
 
-      - name: Build APK
+      - name: Build APK with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew clean
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: List APK files
-        run: find app/build/outputs -type f -name "*.apk"
+      - name: Verify APK exists
+        run: |
+          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK found!"
+            ls -la app/build/outputs/apk/debug/app-debug.apk
+          else
+            echo "APK not found, listing all outputs:"
+            find app/build/outputs -type f
+            exit 1
+          fi
 
-      - name: Create Release
+      - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v1.0.${{ github.run_number }}
-          release_name: Camembert Build ${{ github.run_number }}
+          release_name: Camembert v1.0.${{ github.run_number }}
+          body: |
+            Automated build from GitHub Actions
+            - Target: Android 16 (API 36)
+            - Build type: Debug
+            - Optimized for Samsung Galaxy S26
           draft: false
           prerelease: false
 
@@ -58,5 +72,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: app/build/outputs/apk/debug/app-debug.apk
-          asset_name: camembert-debug.apk
+          asset_name: camembert-v1.0.${{ github.run_number }}-debug.apk
           asset_content_type: application/vnd.android.package-archive

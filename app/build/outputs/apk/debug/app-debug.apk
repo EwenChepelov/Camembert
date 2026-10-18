@@ -1,0 +1,9 @@
+This is a placeholder APK file. The actual APK will be generated when you run the GitHub Actions workflow.
+
+To generate the real APK:
+1. Go to: https://github.com/EwenChepelov/Camembert/actions/workflows/build-and-release.yml
+2. Click "Run workflow"
+3. Wait for completion
+4. Download from Releases: https://github.com/EwenChepelov/Camembert/releases
+
+This file is here to ensure the directory structure exists for the workflow.
