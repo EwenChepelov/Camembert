@@ -5,13 +5,13 @@ plugins {
 android {
     namespace 'fr.chepelov.camembert'
     
-    // Target Android 17 / API 37
-    compileSdk 37
+    // Target Android 16 / API 36 (Android 16 = API 36)
+    compileSdk 36
     
     defaultConfig {
         applicationId 'fr.chepelov.camembert'
         minSdk 30
-        targetSdk 37
+        targetSdk 36
         versionCode 3
         versionName '1.2'
         

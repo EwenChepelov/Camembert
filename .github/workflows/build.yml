@@ -1,4 +1,4 @@
-name: Build and Upload APK
+name: Build APK
 
 on:
   workflow_dispatch:
@@ -31,12 +31,16 @@ jobs:
       - name: Build APK
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew clean
+          ./gradlew assembleDebug --no-daemon --stacktrace --info
 
-      - name: List APK file
-        run: ls -la app/build/outputs/apk/debug/
+      - name: List all files
+        run: find app/build/outputs -type f -name "*.apk" || true
 
-      - name: Upload APK as artifact
+      - name: Create outputs directory if missing
+        run: mkdir -p app/build/outputs/apk/debug || true
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: camembert-debug-apk
