@@ -34,7 +34,7 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           cmdline-tools-version: '12.0'
-          packages: 'platforms;android-37 build-tools;37.0.0 platforms;android-30 extras;android;m2repository'
+          packages: 'platforms;android-36 build-tools;36.0.0 platforms;android-30 extras;android;m2repository'
           accept-android-sdk-licenses: true
 
       - name: Build with Gradle
