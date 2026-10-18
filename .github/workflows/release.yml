@@ -1,4 +1,4 @@
-name: Build and Release APK
+name: Build and Upload APK
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-release:
-    name: Build and Release APK
+  build:
+    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
@@ -33,13 +33,12 @@ jobs:
           chmod +x ./gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Create Release and Upload APK
-        uses: softprops/action-gh-release@v2
+      - name: List APK file
+        run: ls -la app/build/outputs/apk/debug/
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: Camembert Build ${{ github.run_number }}
-          tag_name: build-${{ github.run_number }}
-          files: app/build/outputs/apk/debug/app-debug.apk
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: camembert-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 90
