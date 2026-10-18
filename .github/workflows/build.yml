@@ -33,18 +33,9 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          cmdline-tools: '11.0'
-          api-level: '37'
-          build-tools: '37.0.0'
-          ndk: 'false'
-          cmake: 'false'
-
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses > /dev/null
-
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install "platforms;android-37" "build-tools;37.0.0" "platforms;android-30" "extras;android;m2repository" || true
+          cmdline-tools-version: '12.0'
+          packages: 'platforms;android-37 build-tools;37.0.0 platforms;android-30 extras;android;m2repository'
+          accept-android-sdk-licenses: true
 
       - name: Build with Gradle
         run: |
