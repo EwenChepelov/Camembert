@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="fr.chepelov.camembert">
+
+    <!-- Optimizations for Android 17 / API 37 -->
+    <uses-sdk
+        android:minSdkVersion="30"
+        android:targetSdkVersion="37"
+        android:compileSdkVersion="37"
+        tools:targetApi="37" />
+
+    <!-- Enable hardware acceleration for WebView -->
+    <application
+        android:name=".CamembertApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Camembert"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Camembert"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="37">
+
+        <!-- Hardware acceleration for WebView -->
+        <meta-data
+            android:name="android.webkit.WebView.EnableHardwareAcceleration"
+            android:value="true" />
+
+        <!-- Enable WebView optimizations -->
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="false" />
+
+        <!-- Optimize for Samsung devices -->
+        <meta-data
+            android:name="com.samsung.android.webview.enable_hardware_acceleration"
+            android:value="true" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            tools:targetApi="37">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Memory optimizations for large screens -->
+        <meta-data
+            android:name="android.app.androidhwextra"
+            android:value="true" />
+    </application>
+
+</manifest>

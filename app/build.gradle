@@ -4,31 +4,170 @@ plugins {
 
 android {
     namespace 'fr.chepelov.camembert'
-    compileSdk 36
-
+    
+    // Target Android 17 / API 37
+    compileSdk 37
+    
     defaultConfig {
         applicationId 'fr.chepelov.camembert'
         minSdk 30
-        targetSdk 36
-        versionCode 2
-        versionName '1.1'
+        targetSdk 37
+        versionCode 3
+        versionName '1.2'
+        
+        // Optimizations for Samsung Galaxy S26
+        // Enable hardware acceleration
+        vectorDrawables.useSupportLibrary = true
+        
+        // Enable multi-dex for large applications
+        multiDexEnabled true
+        
+        // Enable R8 for code shrinking
+        shrinkResources true
     }
 
+    // Java 17 compatibility
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    // Kotlin options (for future compatibility)
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    // Build features
+    buildFeatures {
+        viewBinding false
+        compose false
+    }
+
+    // Packaging options
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE',
+                'META-INF/LICENSE.txt',
+                'META-INF/license.txt',
+                'META-INF/NOTICE',
+                'META-INF/NOTICE.txt',
+                'META-INF/notice.txt',
+                'META-INF/ASL2.0'
+            ]
+        }
+    }
+
+    // Memory optimizations for build process
+    dexOptions {
+        javaMaxHeapSize '4g'
+        preDexLibraries true
+        additionalParameters '--multi-dex', '--set-max-idx-number=50000'
+    }
+
+    // WebView specific optimizations
+    webViewOptions {
+        // Enable hardware acceleration for WebView
+        enableHardwareAcceleration true
+        // Enable WebView debugging in debug builds
+        enableWebViewDebugging BuildConfig.DEBUG
+    }
+
+    // Build types
     buildTypes {
         debug {
             debuggable true
-        }
-        release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Enable WebView debugging
+            resValue 'string', 'webview_debug', 'true'
+        }
+        
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Optimize for release
+            resValue 'string', 'webview_debug', 'false'
+            
+            // Enable code shrinking and obfuscation
+            signingConfig signingConfigs.release
+            
+            // Enable zip align
+            zipAlignEnabled true
+        }
+    }
+
+    // Product flavors for different build variants
+    flavorDimensions 'version'
+    productFlavors {
+        standard {
+            dimension 'version'
+            versionNameSuffix ''
+        }
+    }
+
+    // Splits for ABI (optional - can reduce APK size)
+    splits {
+        abi {
+            enable false // Disable for now to keep universal APK
+            universalApk true
+        }
+    }
+
+    // Signing configs
+    signingConfigs {
+        release {
+            // Placeholder - configure with your keystore
+            // storeFile file('camembert-release.keystore')
+            // storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+            // keyAlias System.getenv('ANDROID_KEY_ALIAS')
+            // keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+        }
+    }
+
+    // Lint options
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    // Test options
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
 
+// Dependencies
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
+    // AndroidX core libraries
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    
+    // WebView compatibility (optional but recommended)
+    implementation 'androidx.webkit:webkit:1.12.0'
+    
+    // Material Design 3 for modern UI
+    implementation 'com.google.android.material:material:1.12.0'
+    
+    // Test dependencies
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
+
+// Apply multi-dex library for large applications
+apply plugin: 'com.android.application'
