@@ -1,36 +1,23 @@
-name: Build and Release APK
+name: Build APK
 
 on:
   workflow_dispatch:
     inputs:
       build_type:
-        description: 'Build type (debug or release)'
+        description: 'Type de build'
         required: true
-        default: 'release'
+        default: 'debug'
         type: choice
         options:
           - debug
           - release
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
     name: Build APK
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        build_type: [debug, release]
-        include:
-          - build_type: debug
-            task: assembleDebug
-            apk_name: app-debug.apk
-          - build_type: release
-            task: assembleRelease
-            apk_name: app-release.apk
 
     steps:
       - name: Checkout code
@@ -45,155 +32,36 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools: '11.0'
+          api-level: '37'
+          build-tools: '37.0.0'
+          ndk: 'false'
+          cmake: 'false'
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses > /dev/null
 
       - name: Install Android SDK components
         run: |
-          sdkmanager --install "platform-tools" \
-                     "platforms;android-37" \
-                     "build-tools;37.0.0" \
-                     "platforms;android-36" \
-                     "build-tools;36.0.0" \
-                     "platforms;android-30" \
-                     "extras;android;m2repository" || true
-          
-          # Accept licenses
-          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --install "platforms;android-37" "build-tools;37.0.0" "platforms;android-30" "extras;android;m2repository" || true
 
-      - name: Clean project
+      - name: Build with Gradle
         run: |
-          if [ -x "./gradlew" ]; then
-            ./gradlew clean --no-daemon
+          chmod +x ./gradlew
+          if [ "${{ github.event.inputs.build_type || 'debug' }}" = "release" ]; then
+            ./gradlew assembleRelease --no-daemon --stacktrace
           else
-            gradle clean --no-daemon
+            ./gradlew assembleDebug --no-daemon --stacktrace
           fi
 
-      - name: Build APK (Debug)
-        if: matrix.build_type == 'debug'
-        run: |
-          if [ -x "./gradlew" ]; then
-            ./gradlew assembleDebug --no-daemon --stacktrace --info
-          else
-            gradle assembleDebug --no-daemon --stacktrace --info
-          fi
+      - name: List outputs
+        run: ls -la app/build/outputs/apk/ || true
 
-      - name: Build APK (Release)
-        if: matrix.build_type == 'release'
-        run: |
-          if [ -x "./gradlew" ]; then
-            ./gradlew assembleRelease --no-daemon --stacktrace --info
-          else
-            gradle assembleRelease --no-daemon --stacktrace --info
-          fi
-
-      - name: List build outputs
-        run: |
-          ls -la app/build/outputs/apk/ || true
-          ls -la app/build/outputs/apk/debug/ || true
-          ls -la app/build/outputs/apk/release/ || true
-
-      - name: Upload Debug APK artifact
-        if: matrix.build_type == 'debug'
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: camembert-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: camembert-apk-${{ github.event.inputs.build_type || 'debug' }}
+          path: app/build/outputs/apk/${{ github.event.inputs.build_type || 'debug' }}/app-${{ github.event.inputs.build_type || 'debug' }}.apk
           compression-level: 0
           retention-days: 30
-
-      - name: Upload Release APK artifact
-        if: matrix.build_type == 'release'
-        uses: actions/upload-artifact@v4
-        with:
-          name: camembert-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
-          compression-level: 0
-          retention-days: 90
-
-  # Optional: Create a universal APK with all architectures
-  universal-build:
-    name: Universal APK Build
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: gradle
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install "platform-tools" \
-                     "platforms;android-37" \
-                     "build-tools;37.0.0" \
-                     "extras;android;m2repository" || true
-          yes | sdkmanager --licenses > /dev/null || true
-
-      - name: Build Universal APK
-        run: |
-          if [ -x "./gradlew" ]; then
-            ./gradlew bundleRelease --no-daemon
-          else
-            gradle bundleRelease --no-daemon
-          fi
-
-      - name: Upload AAB artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: camembert-universal-aab
-          path: app/build/outputs/bundle/release/app-release.aab
-          compression-level: 0
-          retention-days: 90
-
-  # Optional: Build with specific target
-  custom-build:
-    name: Custom Build
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'workflow_dispatch'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: gradle
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK components
-        run: |
-          sdkmanager --install "platform-tools" \
-                     "platforms;android-37" \
-                     "build-tools;37.0.0" \
-                     "extras;android;m2repository" || true
-          yes | sdkmanager --licenses > /dev/null || true
-
-      - name: Build selected type
-        run: |
-          TASK="assemble${{ github.event.inputs.build_type || 'Release' }}"
-          if [ -x "./gradlew" ]; then
-            ./gradlew $TASK --no-daemon --stacktrace
-          else
-            gradle $TASK --no-daemon --stacktrace
-          fi
-
-      - name: Upload custom APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: camembert-custom-${{ github.event.inputs.build_type || 'release' }}
-          path: app/build/outputs/apk/${{ github.event.inputs.build_type || 'release' }}/app-${{ github.event.inputs.build_type || 'release' }}.apk
-          compression-level: 0
