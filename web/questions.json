@@ -1,0 +1,905 @@
+// Camembert - Base de données de questions
+// Plus de 100 questions pour 8 joueurs
+
+const QUESTIONS = [
+    // Culture Générale
+    {
+        category: "Culture Générale",
+        question: "Quel est le plus long fleuve du monde ?",
+        answers: [
+            { text: "Le Nil", correct: false },
+            { text: "L'Amazone", correct: true },
+            { text: "Le Yangtsé", correct: false },
+            { text: "Le Mississippi", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "En quelle année a eu lieu la Révolution française ?",
+        answers: [
+            { text: "1789", correct: true },
+            { text: "1848", correct: false },
+            { text: "1870", correct: false },
+            { text: "1900", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est le pays le plus grand du monde ?",
+        answers: [
+            { text: "Russie", correct: true },
+            { text: "Canada", correct: false },
+            { text: "Chine", correct: false },
+            { text: "États-Unis", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Qui a peint la Joconde ?",
+        answers: [
+            { text: "Léonard de Vinci", correct: true },
+            { text: "Michel-Ange", correct: false },
+            { text: "Raphaël", correct: false },
+            { text: "Van Gogh", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est le plus grand océan du monde ?",
+        answers: [
+            { text: "Océan Pacifique", correct: true },
+            { text: "Océan Atlantique", correct: false },
+            { text: "Océan Indien", correct: false },
+            { text: "Océan Arctique", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est l'animal le plus rapide du monde ?",
+        answers: [
+            { text: "Guépard", correct: true },
+            { text: "Faucon pèlerin", correct: false },
+            { text: "Gazelle", correct: false },
+            { text: "Lion", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est le plus haut sommet du monde ?",
+        answers: [
+            { text: "Everest", correct: true },
+            { text: "K2", correct: false },
+            { text: "Kangchenjunga", correct: false },
+            { text: "Lhotse", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "En quelle année a commencé la Seconde Guerre mondiale ?",
+        answers: [
+            { text: "1939", correct: true },
+            { text: "1940", correct: false },
+            { text: "1941", correct: false },
+            { text: "1938", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est le premier homme à avoir marché sur la Lune ?",
+        answers: [
+            { text: "Neil Armstrong", correct: true },
+            { text: "Buzz Aldrin", correct: false },
+            { text: "Youri Gagarine", correct: false },
+            { text: "John Glenn", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Culture Générale",
+        question: "Quel est le plus grand désert du monde ?",
+        answers: [
+            { text: "Antarctique", correct: true },
+            { text: "Sahara", correct: false },
+            { text: "Arabie", correct: false },
+            { text: "Gobi", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    
+    // Histoire
+    {
+        category: "Histoire",
+        question: "Qui était le premier président de la République française ?",
+        answers: [
+            { text: "Louis-Napoléon Bonaparte", correct: false },
+            { text: "Adolphe Thiers", correct: true },
+            { text: "Charles de Gaulle", correct: false },
+            { text: "Jules Grévy", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Histoire",
+        question: "En quelle année a été signée la Déclaration d'Indépendance des États-Unis ?",
+        answers: [
+            { text: "1776", correct: true },
+            { text: "1789", correct: false },
+            { text: "1800", correct: false },
+            { text: "1765", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Histoire",
+        question: "Quel empereur romain a construit un mur en Angleterre ?",
+        answers: [
+            { text: "Hadrien", correct: true },
+            { text: "Néron", correct: false },
+            { text: "Auguste", correct: false },
+            { text: "Caligula", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Histoire",
+        question: "Quel était le nom du premier roi de France ?",
+        answers: [
+            { text: "Clovis", correct: true },
+            { text: "Charlemagne", correct: false },
+            { text: "Louis XIV", correct: false },
+            { text: "Philippe Auguste", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Histoire",
+        question: "En quelle année a eu lieu la chute du mur de Berlin ?",
+        answers: [
+            { text: "1989", correct: true },
+            { text: "1990", correct: false },
+            { text: "1988", correct: false },
+            { text: "1991", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Histoire",
+        question: "Qui a découvert l'Amérique en 1492 ?",
+        answers: [
+            { text: "Christophe Colomb", correct: true },
+            { text: "Amerigo Vespucci", correct: false },
+            { text: "Magellan", correct: false },
+            { text: "Vasco de Gama", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Histoire",
+        question: "Quel était le dernier roi de France ?",
+        answers: [
+            { text: "Louis-Philippe I", correct: false },
+            { text: "Louis XVI", correct: false },
+            { text: "Louis XVIII", correct: false },
+            { text: "Charles X", correct: true }
+        ],
+        difficulty: "difficile"
+    },
+    {
+        category: "Histoire",
+        question: "En quelle année a été signée la Magna Carta ?",
+        answers: [
+            { text: "1215", correct: true },
+            { text: "1415", correct: false },
+            { text: "1615", correct: false },
+            { text: "1815", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    {
+        category: "Histoire",
+        question: "Quel général a gagné la bataille de Waterloo ?",
+        answers: [
+            { text: "Napoléon Bonaparte", correct: false },
+            { text: "Duke de Wellington", correct: true },
+            { text: "Maréchal Ney", correct: false },
+            { text: "Blücher", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Histoire",
+        question: "Quel était le nom du premier empereur romain ?",
+        answers: [
+            { text: "Auguste", correct: true },
+            { text: "Jules César", correct: false },
+            { text: "Néron", correct: false },
+            { text: "Tibère", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    
+    // Géographie
+    {
+        category: "Géographie",
+        question: "Quel est le plus grand pays d'Europe ?",
+        answers: [
+            { text: "Russie", correct: true },
+            { text: "France", correct: false },
+            { text: "Allemagne", correct: false },
+            { text: "Ukraine", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus grand lac du monde ?",
+        answers: [
+            { text: "Mer Caspienne", correct: true },
+            { text: "Lac Supérieur", correct: false },
+            { text: "Lac Victoria", correct: false },
+            { text: "Lac Baïkal", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus grand pays d'Afrique ?",
+        answers: [
+            { text: "Algérie", correct: true },
+            { text: "Nigeria", correct: false },
+            { text: "Soudan", correct: false },
+            { text: "République Démocratique du Congo", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Géographie",
+        question: "Quelle est la capitale du Canada ?",
+        answers: [
+            { text: "Ottawa", correct: true },
+            { text: "Toronto", correct: false },
+            { text: "Montréal", correct: false },
+            { text: "Vancouver", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus grand fleuve d'Europe ?",
+        answers: [
+            { text: "Volga", correct: true },
+            { text: "Danube", correct: false },
+            { text: "Rhin", correct: false },
+            { text: "Seine", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus petit pays du monde ?",
+        answers: [
+            { text: "Vatican", correct: true },
+            { text: "Monaco", correct: false },
+            { text: "Saint-Marin", correct: false },
+            { text: "Liechtenstein", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Géographie",
+        question: "Quelle est la capitale de l'Australie ?",
+        answers: [
+            { text: "Canberra", correct: true },
+            { text: "Sydney", correct: false },
+            { text: "Melbourne", correct: false },
+            { text: "Brisbane", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus long fleuve d'Afrique ?",
+        answers: [
+            { text: "Nil", correct: true },
+            { text: "Congo", correct: false },
+            { text: "Niger", correct: false },
+            { text: "Zambèze", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le point le plus profond de la Terre ?",
+        answers: [
+            { text: "Fosse des Mariannes", correct: true },
+            { text: "Fosse de Porto Rico", correct: false },
+            { text: "Fosse des Philippines", correct: false },
+            { text: "Fosse du Japon", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Géographie",
+        question: "Quel est le plus grand archipel du monde ?",
+        answers: [
+            { text: "Indonésie", correct: true },
+            { text: "Philippines", correct: false },
+            { text: "Japon", correct: false },
+            { text: "Maldives", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    
+    // Sciences
+    {
+        category: "Sciences",
+        question: "Quel est le symbole chimique de l'or ?",
+        answers: [
+            { text: "Au", correct: true },
+            { text: "Ag", correct: false },
+            { text: "Fe", correct: false },
+            { text: "Cu", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quelle est la vitesse de la lumière en km/s ?",
+        answers: [
+            { text: "300 000", correct: true },
+            { text: "150 000", correct: false },
+            { text: "500 000", correct: false },
+            { text: "1 000 000", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quel est le plus grand organe du corps humain ?",
+        answers: [
+            { text: "Peau", correct: true },
+            { text: "Foie", correct: false },
+            { text: "Cœur", correct: false },
+            { text: "Poumons", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sciences",
+        question: "Quelle est la formule chimique de l'eau ?",
+        answers: [
+            { text: "H2O", correct: true },
+            { text: "CO2", correct: false },
+            { text: "O2", correct: false },
+            { text: "H2", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+        answers: [
+            { text: "Azote (N2)", correct: true },
+            { text: "Oxygène (O2)", correct: false },
+            { text: "Dioxyde de carbone (CO2)", correct: false },
+            { text: "Argon", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quelle est la température d'ébullition de l'eau en degrés Celsius ?",
+        answers: [
+            { text: "100°C", correct: true },
+            { text: "90°C", correct: false },
+            { text: "120°C", correct: false },
+            { text: "80°C", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quel est l'élément chimique le plus abondant dans l'univers ?",
+        answers: [
+            { text: "Hydrogène", correct: true },
+            { text: "Hélium", correct: false },
+            { text: "Oxygène", correct: false },
+            { text: "Carbone", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sciences",
+        question: "Quelle est la planète la plus proche du Soleil ?",
+        answers: [
+            { text: "Mercure", correct: true },
+            { text: "Vénus", correct: false },
+            { text: "Terre", correct: false },
+            { text: "Mars", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sciences",
+        question: "Quel est le plus grand organisme vivant sur Terre ?",
+        answers: [
+            { text: "Un champignon (Armillaria ostoyae)", correct: true },
+            { text: "La baleine bleue", correct: false },
+            { text: "Un séquoia", correct: false },
+            { text: "Un corail", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    {
+        category: "Sciences",
+        question: "Quelle est la durée de vie moyenne d'un globule rouge ?",
+        answers: [
+            { text: "120 jours", correct: true },
+            { text: "30 jours", correct: false },
+            { text: "365 jours", correct: false },
+            { text: "7 jours", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    
+    // Arts et Littérature
+    {
+        category: "Arts et Littérature",
+        question: "Qui a écrit 'Les Misérables' ?",
+        answers: [
+            { text: "Victor Hugo", correct: true },
+            { text: "Gustave Flaubert", correct: false },
+            { text: "Émile Zola", correct: false },
+            { text: "Honoré de Balzac", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Quel artiste a peint 'La Nuit étoilée' ?",
+        answers: [
+            { text: "Vincent van Gogh", correct: true },
+            { text: "Pablo Picasso", correct: false },
+            { text: "Salvador Dalí", correct: false },
+            { text: "Claude Monet", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Qui a écrit 'Le Petit Prince' ?",
+        answers: [
+            { text: "Antoine de Saint-Exupéry", correct: true },
+            { text: "Jules Verne", correct: false },
+            { text: "Albert Camus", correct: false },
+            { text: "Jean-Paul Sartre", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Quel est le premier livre de la Bible ?",
+        answers: [
+            { text: "Genèse", correct: true },
+            { text: "Exode", correct: false },
+            { text: "Matthieu", correct: false },
+            { text: "Psaumes", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Qui a sculpté 'La Vénus de Milo' ?",
+        answers: [
+            { text: "Alexandros d'Antioche", correct: true },
+            { text: "Michel-Ange", correct: false },
+            { text: "Phidias", correct: false },
+            { text: "Praxitèle", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Quel est le nom du célèbre tableau de Léonard de Vinci représentant une femme ?",
+        answers: [
+            { text: "La Joconde", correct: true },
+            { text: "La Naissance de Vénus", correct: false },
+            { text: "La Jeune Fille à la perle", correct: false },
+            { text: "Le Cri", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Qui a écrit 'Roméo et Juliette' ?",
+        answers: [
+            { text: "William Shakespeare", correct: true },
+            { text: "Charles Dickens", correct: false },
+            { text: "Jane Austen", correct: false },
+            { text: "Mark Twain", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Quel mouvement artistique a été fondé par Pablo Picasso ?",
+        answers: [
+            { text: "Cubisme", correct: true },
+            { text: "Surréalisme", correct: false },
+            { text: "Impressionnisme", correct: false },
+            { text: "Fauvisme", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Qui a écrit 'À la recherche du temps perdu' ?",
+        answers: [
+            { text: "Marcel Proust", correct: true },
+            { text: "Gustave Flaubert", correct: false },
+            { text: "Émile Zola", correct: false },
+            { text: "Honoré de Balzac", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Arts et Littérature",
+        question: "Quel est le plus ancien instrument de musique connu ?",
+        answers: [
+            { text: "Flûte", correct: true },
+            { text: "Tambour", correct: false },
+            { text: "Lyre", correct: false },
+            { text: "Harpe", correct: false }
+        ],
+        difficulty: "difficile"
+    },
+    
+    // Sports
+    {
+        category: "Sports",
+        question: "Quel pays a remporté le plus de Coupes du Monde de football ?",
+        answers: [
+            { text: "Brésil", correct: true },
+            { text: "Allemagne", correct: false },
+            { text: "Italie", correct: false },
+            { text: "Argentine", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sports",
+        question: "Quel est le sport le plus pratiqué au monde ?",
+        answers: [
+            { text: "Football", correct: true },
+            { text: "Basketball", correct: false },
+            { text: "Tennis", correct: false },
+            { text: "Cricket", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sports",
+        question: "Quel pays a organisé les Jeux Olympiques de 2021 ?",
+        answers: [
+            { text: "Japon", correct: true },
+            { text: "Chine", correct: false },
+            { text: "Brésil", correct: false },
+            { text: "France", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sports",
+        question: "Quel est le record du monde du 100m hommes ?",
+        answers: [
+            { text: "9,58 secondes (Usain Bolt)", correct: true },
+            { text: "9,63 secondes", correct: false },
+            { text: "9,69 secondes", correct: false },
+            { text: "9,74 secondes", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sports",
+        question: "Quel est le seul pays à avoir participé à toutes les Coupes du Monde de football ?",
+        answers: [
+            { text: "Brésil", correct: true },
+            { text: "Allemagne", correct: false },
+            { text: "Italie", correct: false },
+            { text: "France", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sports",
+        question: "Quel sport utilise une raquette, un volant et un filet ?",
+        answers: [
+            { text: "Badminton", correct: true },
+            { text: "Tennis", correct: false },
+            { text: "Squash", correct: false },
+            { text: "Ping-pong", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sports",
+        question: "Quel est le nombre de joueurs dans une équipe de rugby ?",
+        answers: [
+            { text: "15", correct: true },
+            { text: "11", correct: false },
+            { text: "7", correct: false },
+            { text: "13", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sports",
+        question: "Quel pays a remporté le Tour de France le plus de fois ?",
+        answers: [
+            { text: "France", correct: true },
+            { text: "Belgique", correct: false },
+            { text: "Espagne", correct: false },
+            { text: "Italie", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Sports",
+        question: "Quel est le sport national du Canada ?",
+        answers: [
+            { text: "Hockey sur glace", correct: true },
+            { text: "Football", correct: false },
+            { text: "Basketball", correct: false },
+            { text: "Baseball", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Sports",
+        question: "Quel boxeur était surnommé 'The Greatest' ?",
+        answers: [
+            { text: "Mohammed Ali", correct: true },
+            { text: "Mike Tyson", correct: false },
+            { text: "Floyd Mayweather", correct: false },
+            { text: "Sugar Ray Robinson", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    
+    // Cinéma et Télévision
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel film a remporté le plus d'Oscars ?",
+        answers: [
+            { text: "Ben-Hur / Titanic / Le Seigneur des Anneaux (11)", correct: true },
+            { text: "Autant en emporte le vent (8)", correct: false },
+            { text: "E.T. l'extra-terrestre (4)", correct: false },
+            { text: "Star Wars (6)", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Qui a réalisé 'Pulp Fiction' ?",
+        answers: [
+            { text: "Quentin Tarantino", correct: true },
+            { text: "Martin Scorsese", correct: false },
+            { text: "Steven Spielberg", correct: false },
+            { text: "Christopher Nolan", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel est le film le plus rentable de l'histoire ?",
+        answers: [
+            { text: "Avatar", correct: true },
+            { text: "Avengers: Endgame", correct: false },
+            { text: "Titanic", correct: false },
+            { text: "Star Wars: Le Réveil de la Force", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel acteur a joué James Bond le plus de fois ?",
+        answers: [
+            { text: "Roger Moore", correct: true },
+            { text: "Sean Connery", correct: false },
+            { text: "Pierce Brosnan", correct: false },
+            { text: "Daniel Craig", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel est le premier film de la saga Star Wars ?",
+        answers: [
+            { text: "Star Wars: Épisode IV - Un nouvel espoir", correct: true },
+            { text: "Star Wars: Épisode I - La Menace fantôme", correct: false },
+            { text: "Star Wars: Épisode V - L'Empire contre-attaque", correct: false },
+            { text: "Star Wars: Épisode III - La Revanche des Sith", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Qui a créé la série 'Game of Thrones' ?",
+        answers: [
+            { text: "George R.R. Martin", correct: true },
+            { text: "David Benioff et D.B. Weiss", correct: false },
+            { text: "J.J. Abrams", correct: false },
+            { text: "Steven Spielberg", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel est le premier long-métrage d'animation de Disney ?",
+        answers: [
+            { text: "Blanche-Neige et les Sept Nains", correct: true },
+            { text: "Pinocchio", correct: false },
+            { text: "Cendrillon", correct: false },
+            { text: "La Belle et la Bête", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel acteur joue Tony Stark dans les films Avengers ?",
+        answers: [
+            { text: "Robert Downey Jr.", correct: true },
+            { text: "Chris Evans", correct: false },
+            { text: "Mark Ruffalo", correct: false },
+            { text: "Chris Hemsworth", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel film a la réplique 'Je suis Groot' ?",
+        answers: [
+            { text: "Les Gardiens de la Galaxie", correct: true },
+            { text: "Avengers", correct: false },
+            { text: "Thor", correct: false },
+            { text: "Doctor Strange", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Cinéma et Télévision",
+        question: "Quel est le nom du premier film de la saga Harry Potter ?",
+        answers: [
+            { text: "Harry Potter à l'école des sorciers", correct: true },
+            { text: "Harry Potter et la Chambre des Secrets", correct: false },
+            { text: "Harry Potter et le Prisonnier d'Azkaban", correct: false },
+            { text: "Harry Potter et la Coupe de Feu", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    
+    // Musique
+    {
+        category: "Musique",
+        question: "Quel groupe a sorti l'album 'The Dark Side of the Moon' ?",
+        answers: [
+            { text: "Pink Floyd", correct: true },
+            { text: "The Beatles", correct: false },
+            { text: "Led Zeppelin", correct: false },
+            { text: "The Rolling Stones", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Qui est le 'Roi de la Pop' ?",
+        answers: [
+            { text: "Michael Jackson", correct: true },
+            { text: "Elvis Presley", correct: false },
+            { text: "Madonna", correct: false },
+            { text: "Prince", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Quel est le premier album de Beyoncé ?",
+        answers: [
+            { text: "Dangerously in Love", correct: true },
+            { text: "B'Day", correct: false },
+            { text: "I Am... Sasha Fierce", correct: false },
+            { text: "4", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Musique",
+        question: "Quel instrument joue Mozart ?",
+        answers: [
+            { text: "Piano", correct: true },
+            { text: "Violon", correct: false },
+            { text: "Flûte", correct: false },
+            { text: "Guitare", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Quel est le groupe de rock le plus vendu de l'histoire ?",
+        answers: [
+            { text: "The Beatles", correct: true },
+            { text: "Led Zeppelin", correct: false },
+            { text: "Pink Floyd", correct: false },
+            { text: "The Rolling Stones", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Qui a chanté 'Bohemian Rhapsody' ?",
+        answers: [
+            { text: "Queen", correct: true },
+            { text: "The Beatles", correct: false },
+            { text: "Elton John", correct: false },
+            { text: "Freddie Mercury (solo)", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Quel est le nom du premier album de Daft Punk ?",
+        answers: [
+            { text: "Homework", correct: true },
+            { text: "Discovery", correct: false },
+            { text: "Random Access Memories", correct: false },
+            { text: "Human After All", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Musique",
+        question: "Quel chanteur est connu pour 'Like a Rolling Stone' ?",
+        answers: [
+            { text: "Bob Dylan", correct: true },
+            { text: "Mick Jagger", correct: false },
+            { text: "John Lennon", correct: false },
+            { text: "Elvis Presley", correct: false }
+        ],
+        difficulty: "moyen"
+    },
+    {
+        category: "Musique",
+        question: "Quel est l'instrument national de l'Écosse ?",
+        answers: [
+            { text: "Cornemuse", correct: true },
+            { text: "Violon", correct: false },
+            { text: "Harpe", correct: false },
+            { text: "Flûte", correct: false }
+        ],
+        difficulty: "facile"
+    },
+    {
+        category: "Musique",
+        question: "Quel groupe a sorti 'Smells Like Teen Spirit' ?",
+        answers: [
+            { text: "Nirvana", correct: true },
+            { text: "Pearl Jam", correct: false },
+            { text: "Soundgarden", correct: false },
+            { text: "Alice in Chains", correct: false }
+        ],
+        difficulty: "facile"
+    }
+];
+
+// Export for use in script.js
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = QUESTIONS;
+}

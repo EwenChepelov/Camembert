@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Camembert - Jeu de plateau en ligne</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>🧀 Camembert</h1>
+            <p class="subtitle">Le jeu de culture générale pour 8 joueurs</p>
+        </header>
+
+        <div class="game-info">
+            <div class="players-section">
+                <h2>👥 Joueurs (<span id="player-count">0</span>/8)</h2>
+                <div id="players-list" class="players-list"></div>
+            </div>
+            
+            <div class="scoreboard">
+                <h2>🏆 Classement</h2>
+                <ol id="scoreboard"></ol>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="question-container" id="question-container">
+                <div class="question-header">
+                    <span class="question-number">Question <span id="question-number">0</span>/<span id="total-questions">0</span></span>
+                    <span class="category" id="category"></span>
+                </div>
+                <h2 id="question-text">Prêt à jouer ?</h2>
+                <div class="answers" id="answers"></div>
+            </div>
+
+            <div class="start-screen" id="start-screen">
+                <h2>Bienvenue sur Camembert !</h2>
+                <p>Rejoignez la partie avec votre nom :</p>
+                <div class="join-form">
+                    <input type="text" id="player-name" placeholder="Votre pseudo" maxlength="20">
+                    <button id="join-btn">Rejoindre</button>
+                </div>
+                <div class="waiting-message" id="waiting-message"></div>
+            </div>
+
+            <div class="results-screen" id="results-screen">
+                <h2>✅ Résultats</h2>
+                <div id="results"></div>
+                <button id="next-question-btn" class="hidden">Question suivante</button>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="start-game-btn" class="hidden">Commencer la partie</button>
+            <button id="leave-btn" class="leave-btn">Quitter</button>
+        </div>
+    </div>
+
+    <div class="timer" id="timer">⏳ 30</div>
+    <div class="notification" id="notification"></div>
+
+    <script src="questions.json"></script>
+    <script src="script.js"></script>
+</body>
+</html>
